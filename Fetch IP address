@@ -1,0 +1,36 @@
+import socket
+import platform
+import requests
+import json
+
+# 1. Get the IP Address
+def get_ip_address():
+    ip_address = requests.get('https://api.ipify.org').text
+    print("IP Address:", ip_address)
+    return ip_address
+
+# 2. Get Location and ISP Information using IP
+def get_location_info(ip_address):
+    response = requests.get(f'http://ip-api.com/json/{ip_address}')
+    data = response.json()
+    
+    if data['status'] == 'success':
+        print("City:", data.get("city"))
+        print("State:", data.get("regionName"))
+        print("Country:", data.get("country"))
+        print("ISP:", data.get("isp"))
+        print("Timezone:", data.get("timezone"))
+    else:
+        print("Location data could not be retrieved.")
+        
+# 3. Get Operating System and System Info
+def get_system_info():
+    print("OS Name:", platform.system())
+    print("OS Version:", platform.version())
+    print("Architecture:", platform.architecture()[0])
+    print("Manufacturer:", platform.node())
+
+# Running each function to get the complete information
+ip_address = get_ip_address()   # Step 1: Fetch the IP address
+get_location_info(ip_address)   # Step 2: Fetch location info
+get_system_info()               # Step 3: Fetch system info
